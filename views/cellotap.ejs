@@ -4,89 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>youtube markers machine</title>
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Rubik" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheets/cellotap-main.css" type="text/css" media="all">
-    <link rel="stylesheet" href="stylesheets/cellotap-secondary.css" type="text/css" media="all">
+    <title>Cello Tap</title>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900,900i|Crimson+Text|Rubik" rel="stylesheet">
+    <link rel="stylesheet" href="stylesheets/cellotap.css" type="text/css" media="all">
 </head>
 
 <body class="site">
     <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
-
-    <header class="masthead" id="sendButton">
-        <div class="masthead-buttons" id="jsonButton">
-          click<br/>for<br/>JSON
-        </div>
-        <div class="masthead-buttons" id="sendToServer">
-          send<br/>to<br/>server
-        </div>
-    </header><!-- .masthead -->
-
-    <div class="page-title">
-        <h1>Cello Tap</h1>
-        <code class="identifier"><pre>youtube markers machine</pre></code>
-        <label class="form-input">name:
-          <input type="text" id="name" placeholder="first ok" />
-        </label>
-        <label class="form-input">password:
-          <input type="text" id="password"  placeholder="not secure" />
-        </label>
-
-    </div><!-- .page-title -->
-
-    <main id="playercontainer" class="main-content">
-      <div class="container">
+    <div id="sidebar"></div>
+    <div id="sidebarcello"></div>
+    <div id="sidebartap"></div>
+    <div id="logo"></div>
+    <div class="surveybox" id="surveycontents">
+      <input type="text" id="nameform" name="surveyname" placeholder="Name:" />
+      <input type="email" id="emailform" name="surveyemail" placeholder="Email:" />
+      <div class="helptext" id="surveytip">
+        <strong>Background</strong> <em>(check all that apply)</em>
       </div>
-    </main><!-- #content .main-content -->
-
-    <div class="button-box" id="the-button-box">
-      <div id="playButton" class="logging-button">
-        click here to play.
+      <div class="surveybgbox" id="surveybgs">
+        <input type="checkbox" name="art1" value="dance">dance
+        <br>
+        <input type="checkbox" name="art2" value="music">music
+        <br>
+        <input type="checkbox" name="art3" value="otherperf">other performance
+        <br>
+        <input type="checkbox" name="art4" value="otherart">other art
       </div>
-      <div id="pauseButton" class="logging-button">
-        click here to pause.
-      </div>
-      <div id="logButton" class="logging-button">
-        click here on the beat.
-      </div>
-      <div id="likeButton" class="logging-button">
-        click here to like a moment.
-      </div>
-      <div id="inButton" class="logging-button">
-        click here to mark an "in" timestamp.
-      </div>
-      <div id="outButton" class="logging-button">
-        click here to mark an "out" timestamp.
-      </div>
-
+      <input type="text" id="otherform" name="surveyother" placeholder="Please describe:" />
+      <input type="submit" class="surveydone" id="surveybutton" value="go!">
     </div>
-    <aside class="sidebar" id="result-box">
-        <code class="identifier"><pre>.userEvents</pre></code>
-    </aside><!-- .sidebar -->
-    <footer class="footer-content" id="video-button-box">
-        <div id="Wmc8bQoL-J0" class="video-link-button">
-          Survivor
-        </div>
-        <div id="z5rRZdiu1UE" class="video-link-button">
-          Sabotage
-        </div>
-        <div id="M11SvDtPBhA" class="video-link-button">
-          Party in the USA
-        </div>
-        <div id="zqNTltOGh5c" class="video-link-button">
-          So What
-        </div>
-        <div id="VwcKwGS7OSQ" class="video-link-button">
-          Fascists Bound to Lose
-        </div>
-        <div class="video-link-button-input">
-        <input type="text" id="userVideoId" placeholder="paste your own ID here" />
-        </div>
-        <div id="submitVideo" class="video-link-button-submit">
-          & click here to submit
-        </div>
+
+    <div id="slush"></div>
+    <div id="guttertop"></div>
+    <div id="guttermid"></div>
+    <div id="gutterbottom">
+      <div class="submittoserver" action="/cellosend" method="post">
+        <input type="submit" id="submitbutton" value="done!">
+      </div>
+    </div>
+    <div id="function" class="peekaboo">
+      <div id="controlsboxplaypause">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 161.8 100" style="width: 100%; padding: auto"><defs><style>.cls-1,.cls-2{fill:#97cfab;}.cls-2{fill-opacity:0;}</style></defs><title>playpause</title><polygon class="cls-1" points="0 100 0 0 61.8 50 0 100"/><rect class="cls-1" x="80.9" width="32" height="100"/><rect class="cls-1" x="129.8" width="32" height="100"/><rect class="cls-2" width="161.8" height="100"/></svg>
+      </div>
+
+      <label class="toggleswitch" id="controlsboxtoggletrack">
+        <input type="checkbox">
+        <span class="toggleslider"></span>
+        <br>
+        <p class="helptext" style="text-indent: 0px; "><strong>Cursor tracking</strong><br><em>(on/off)</em></p>
+      </label>
+    </div>
+    <main id="playercontainer" class="responsive-vimeo-container">
+      <!-- <div class="container">
+      </div> -->
+    </main>
+    <!-- #content .main-content -->
+    <div id="main-overlay">
+      <div id="touch-zones">
+      </div>
+    </div>
+    <div class="commentbox" id="comment">
+      <textarea id="commentform" name="commentinput" placeholder="..."></textarea>
+    </div>
+    <div id="swirl"></div>
+    <div id="swirlbit"></div>
+    <div class="label-right" id="vidlabel">Video</div>
+    <div class="label-right" id="commentlabel">Comment</div>
+
+
     </footer><!-- .footer-content -->
-  <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
+  <script type="text/javascript" src="https://player.vimeo.com/api/player.js"></script>
   <script type="text/javascript" src="javascripts/cellotap-markers.js"></script>
 </body>
 

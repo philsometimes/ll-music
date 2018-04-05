@@ -1,105 +1,251 @@
-var buttonBox = document.querySelector('#the-button-box');
-var results = document.querySelector('#result-box');
-var player;
+var buttonBox = document.querySelector('#function');
+// var results = document.querySelector('#result-box');
 var userEvents = [];
-var currentVideoId = 'z5rRZdiu1UE'
-var sendButton = document.querySelector('#sendToServer');
-var jsonButton = document.querySelector('#jsonButton');
-var nameField = document.querySelector('#name');
-var passwordField = document.querySelector('#password');
-var videoLinkButtonBox = document.querySelector('#video-button-box');
+// temporarily assign currentVideo variables to the default movie
+var currentVideoId = '260963404'
+var currentVideoTitle = 'Cello Tap'
+var currentVideoUrl = 'https://vimeo.com/260963404'
+var sendButton = document.querySelector('#surveybutton');
+var jsonButton = document.querySelector('#submitbutton');
+var nameField = document.querySelector('#nameform');
+var passwordField = document.querySelector('#emailform');
+// var videoLinkButtonBox = document.querySelector('#video-button-box');
+var playercontainer = document.querySelector('#playercontainer');
+var vimeoElement = document.createElement('iframe');
+var videoOverlay = document.querySelector('#main-overlay');
 
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('playercontainer', {
-      videoId: currentVideoId,
-      width: '383',
-      height: '243',
-      events: {
-        'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange,
-      },
-      playerVars: {
-        'controls': 1,
-        'fs': 0,
-        'rel': 0,
-        'showinfo': 0,
-        'playsinline': 1
-      }
-  });
-}
 
-videoLinkButtonBox.addEventListener('click', function(e){
-  if (e.target.matches (".video-link-button")) {
+var options = {
+        id: currentVideoId,
+        loop: true
+  };
+
+var player = new Vimeo.Player('playercontainer', options);
+  player.setVolume(0);
+  player.on('play', function() {
+    console.log('played the video!');
+    player.getVideoTitle().then(function(title) {
+        console.log('title:', title);
+        currentVideoTitle = title;
+      });
+
+    player.getVideoUrl().then(function(url) {
+        console.log('url:', url);
+        currentVideoUrl = url;
+        // url = the vimeo.com url for the video
+      })
+        .catch(function(error) {
+          switch (error.name) {
+              case 'PrivacyError':
+                  // the url isn’t available because of the video’s privacy setting
+                  break;
+
+              default:
+                  // some other error occurred
+                  break;
+          }
+      });
+});
+
+/*putting this aside until we get multiple videos working*/
+// videoLinkButtonBox.addEventListener('click', function(e){
+//   if (e.target.matches (".video-link-button")) {
+//     console.log("just clicked " + e.target.id);
+//     currentVideoId = e.target.id;
+//     console.log("just changed current video to " + currentVideoId);
+//     player.loadVideo(e.target.id)
+//       .then(function(id){
+//         console.log("hope we just played video with id " + id);
+//         player.getVideoTitle().then(function(title) {
+//             console.log('title:', title);
+//             currentVideoTitle = title;
+//           });
+//         player.getVideoUrl().then(function(url) {
+//             console.log('url:', url);
+//             currentVideoUrl = url;
+//             // url = the vimeo.com url for the video
+//
+//           })
+//             .catch(function(error) {
+//               switch (error.name) {
+//                   case 'PrivacyError':
+//                       // the url isn’t available because of the video’s privacy setting
+//                       break;
+//
+//                   default:
+//                       // some other error occurred
+//                       break;
+//               }
+//           });
+//
+//         })
+//       .catch(function(err){
+//         console.log(err);
+//         })
+//
+//   }
+//   else if (e.target.matches("#submitVideo")) {
+//     currentVideoId = document.querySelector('#userVideoId').value;
+//     player.loadVideo(currentVideoId)
+//       .then()
+//       .catch();
+//   }
+//   else {
+//     console.log("problem");
+//   }
+// })
+
+videoOverlay.addEventListener('click', function(e){
+  var x = e.clientX;
+  var y = e.clientY;
+  console.log("x is " + x);
+  console.log("y is " + y);
+  var trueX = Math.round(3.09*(x - 13));
+  var trueY = Math.round(3.09*(350 - (y - 117)));
+  if (trueX > 1920) {
+    trueX = 1920
   }
-  console.log("just clicked " + e.target.id);
-  currentVideoId = e.target.id;
-  console.log("just changed current video to " + currentVideoId);
-  player.loadVideoById({
-    'videoId': e.target.id,
-  })
-  if (e.target.matches("#submitVideo")) {
-    currentVideoId = document.querySelector('#userVideoId').value;
-    player.loadVideoById({
-      'videoId': currentVideoId
+  if (trueX <0) {
+    trueX = 0
+  }
+  if (trueY > 1080) {
+    trueY = 1080
+  }
+  if (trueY <0) {
+    trueY = 0
+  }
+  console.log("trueX is " + trueX);
+  console.log("trueY is " + trueY);
+  var d = new Date();
+  var theClockTime = d.getTime();
+  player.getCurrentTime()
+    .then(function(seconds){
+      var videoTime = 1000 * seconds;
+      var theOffset = theClockTime-videoTime;
+      var newText = ("logged " + e.target.id + " event at " + videoTime + ". x = " + trueX + " and y = " + trueY );
+      var newElement = document.createElement('p');
+      newElement.innerHTML = newText;
+      // results.prepend(newElement);
+      userEvents.push({
+        user: nameField.value,
+        note: "",
+        videoId: currentVideoId,
+        videoUrl: currentVideoUrl,
+        videoTitle: currentVideoTitle,
+        eventType: e.target.id,
+        clockTs: theClockTime,
+        videoTs: videoTime,
+        xPosition: x,
+        yPosition: y,
+        trueXPosition: trueX,
+        trueYPosition: trueY
+      })
     })
-  }
-})
+  .catch(function(err){
+    console.log(err);
+    });
+});
+
 
 buttonBox.addEventListener('click', function(e){
   console.log("just clicked " + e.target.id);
     var d = new Date();
     var theClockTime = d.getTime();
-    var videoTime = 1000 * player.getCurrentTime();
-    var theOffset = videoTime-theClockTime;
-    console.log(theOffset);
-    console.log(theClockTime);
-    var newText = ("logged " + e.target.id + " event at " + player.getCurrentTime());
-    var newElement = document.createElement('p');
-    newElement.innerHTML = newText;
-    results.prepend(newElement);
-    var pw;
-    if (!passwordField.value) {
-      pw = "none"
-    }
-    else {
-      pw = passwordField.value
-    }
-    userEvents.push({
-      user: nameField.value,
-      note: "",
-      videoId: currentVideoId,
-      videoUrl: player.getVideoUrl(),
-      videoTitle: "titleHere",
-      eventType: e.target.id,
-      clockTs: theClockTime,
-      videoTs: videoTime
-    })
-    switch (e.target.id) {
-    case "likeButton":
-    case "inButton":
-    case "outButton":
-    case "logButton":
-      console.log("really pushed the" + e.target.id);
-      break;
-    case "playButton":
-      console.log("really pushed the" + e.target.id + ", which means we need to play");
-      if (!nameField.value || !passwordField.value) {
-          var newText = ("Don't forget to type a name and password.");
-          var newElement = document.createElement('p');
-          newElement.innerHTML = newText;
-          results.appendChild(newElement);
+    player.getCurrentTime()
+      .then(function(seconds){
+        var videoTime = 1000 * seconds;
+        var theOffset = videoTime-theClockTime;
+        console.log("got " + seconds + " for seconds (which we turned into " + videoTime + " for the videoTs), and " + theClockTime + " for clockTs, and thus the offset is " + theOffset);
+        console.log(theOffset);
+        console.log(theClockTime);
+        var newText = ("logged " + e.target.id + " event at " + videoTime);
+        var newElement = document.createElement('p');
+        newElement.innerHTML = newText;
+        // results.prepend(newElement);
+        userEvents.push({
+          user: nameField.value,
+          note: "",
+          videoId: currentVideoId,
+          videoUrl: currentVideoUrl,
+          videoTitle: currentVideoTitle,
+          eventType: e.target.id,
+          clockTs: theClockTime,
+          videoTs: videoTime
+        })
+        switch (e.target.id) {
+        case "likeButton":
+        case "inButton":
+        case "outButton":
+        case "logButton":
+          console.log("really pushed the" + e.target.id);
+          break;
+        case "overlayOn":
+          videoOverlay.style.pointerEvents = "none";
+          break;
+        case "overlayOff":
+          videoOverlay.style.pointerEvents = "auto";
+          break;
+        case "playButton":
+          console.log("really pushed the" + e.target.id + ", which means we need to play");
+          if (!nameField.value || !passwordField.value) {
+              var newText = ("Don't forget to type a name and password.");
+              var newElement = document.createElement('p');
+              newElement.innerHTML = newText;
+              // results.appendChild(newElement);
+            }
+          else {
+            player.play();
+            player.play().then(function() {
+              // the video was played
+              console.log("just started video");
+              })
+              .catch(function(error) {
+                switch (error.name) {
+                  case 'PasswordError':
+                    console.log("password error");
+                    // the video is password-protected and the viewer needs to enter the
+                    // password first
+                    break;
+                  case 'PrivacyError':
+                    console.log("privacy error");
+                    // the video is private
+                    break;
+                  default:
+                    console.log("some other error");
+                    // some other error occurred
+                    break;
+                  }
+              });
+          }
+          break;
+        case "pauseButton":
+          console.log("really pushed the" + e.target.id + ", which means we need to pause");
+          player.pause().then(function() {
+              console.log("just paused, one hopes.");
+              // the video was paused
+              })
+            .catch(function(error) {
+              switch (error.name) {
+                case 'PasswordError':
+                  // the video is password-protected and the viewer needs to enter the
+                  // password first
+                  break;
+                case 'PrivacyError':
+                  // the video is private
+                    break;
+                default:
+                  // some other error occurred
+                  break;
+              }
+            });
+          break;
+        default:
+          console.log("something weird has happened--none of the six buttons fired");
         }
-      else {
-        player.playVideo();
-      }
-      break;
-    case "pauseButton":
-      console.log("really pushed the" + e.target.id + ", which means we need to pause");
-      player.pauseVideo();
-      break;
-    default:
-      console.log("something weird has happened--none of the six buttons fired");
-    }
+        })
+      .catch(function(err){
+        console.log(err);
+        });
 })
 
 function onPlayerReady(event) {
@@ -115,7 +261,7 @@ sendButton.addEventListener("click", function(){
 });
 
 jsonButton.addEventListener("click", function(){
-  results.innerHTML = "<pre class='no-background'>" + (JSON.stringify(userEvents, null, 4)) + "</pre>";
+  // results.innerHTML = "<pre class='no-background'>" + (JSON.stringify(userEvents, null, 4)) + "</pre>";
   // workaround to copy json to clipboard.  Remove??
   var tempText = document.createElement("textarea");
   document.body.appendChild(tempText);
