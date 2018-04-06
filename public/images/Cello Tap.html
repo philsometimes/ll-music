@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cello Tap</title>
+    <link href="Cello%20Tap_files/css.css" rel="stylesheet">
+    <link rel="stylesheet" href="Cello%20Tap_files/cellotap.css" type="text/css" media="all">
+</head>
+
+<body class="site">
+    <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+    <div id="sidebar"></div>
+    <div id="sidebarcello"></div>
+    <div id="sidebartap"></div>
+    <div id="logo"></div>
+    <div class="surveybox" id="surveycontents">
+      <input id="nameform" name="surveyname" placeholder="NAME:" type="text">
+      <input id="pwform" name="surveypw" placeholder="PASSWORD:" type="text">
+      <input id="emailform" name="surveyemail" placeholder="EMAIL:" data-com.agilebits.onepassword.user-edited="yes" value="dfdf" type="email">
+      <div class="helptext" id="surveytip">
+        <strong>Background</strong> <em>(check all that apply)</em>
+      </div>
+      <div class="surveybgbox" id="surveybgs">
+        <input name="art1" value="dance" type="checkbox">dance
+        <br>
+        <input name="art2" value="music" type="checkbox">music
+        <br>
+        <input name="art3" value="otherperf" type="checkbox">other performance
+        <br>
+        <input name="art4" value="otherart" type="checkbox">other art
+      </div>
+      <input id="otherform" name="surveyother" placeholder="PLEASE DESCRIBE:" type="text">
+      <input class="surveydone" id="surveybutton" value="go!" type="submit">
+    </div>
+
+    <div id="slush"></div>
+    <div id="guttertop"></div>
+    <div id="guttermid"></div>
+    <div id="gutterbottom">
+      <div class="submittoserver" action="/cellosend" method="post">
+        <input id="submitbutton" value="done!" type="submit">
+      </div>
+    </div>
+    <div id="function" class="peekaboo">
+      <div id="controlsboxplaypause">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 161.8 100" style="width: 100%; padding: auto"><defs><style>.cls-1,.cls-2{fill:#97cfab;}.cls-2{fill-opacity:0;}</style></defs><title>playpause</title><polygon class="cls-1" points="0 100 0 0 61.8 50 0 100"></polygon><rect class="cls-1" x="80.9" width="32" height="100"></rect><rect class="cls-1" x="129.8" width="32" height="100"></rect><rect class="cls-2" width="161.8" height="100"></rect></svg>
+      </div>
+
+      <label class="toggleswitch" id="controlsboxtoggletrack">
+        <input type="checkbox">
+        <span class="toggleslider"></span>
+        <br>
+        <p class="helptext" style="text-indent: 0px; "><strong>Cursor tracking</strong><br><em>(on/off)</em></p>
+      </label>
+    </div>
+    <main id="playercontainer" class="responsive-vimeo-container" data-vimeo-initialized="true">
+      <!-- <div class="container">
+      </div> -->
+    <iframe src="Cello%20Tap_files/260963404.html" title="Cello Tap" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" data-ready="true" width="640" height="360" frameborder="0"></iframe></main>
+    <!-- #content .main-content -->
+    <div id="main-overlay">
+      <div id="touch-zones">
+      </div>
+    </div>
+    <div class="commentbox" id="comment">
+      <textarea id="commentform" name="commentinput" placeholder="..."></textarea>
+    </div>
+    <div id="swirl"></div>
+    <div id="swirlbit"></div>
+    <div class="label-right" id="vidlabel">Video</div>
+    <div class="label-right" id="commentlabel">Comment</div>
+
+
+    <!-- .footer-content -->
+  <script type="text/javascript" src="Cello%20Tap_files/player.js"></script>
+  <script type="text/javascript" src="Cello%20Tap_files/cellotap-markers.js"></script>
+
+
+
+</body></html>

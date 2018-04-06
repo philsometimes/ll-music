@@ -85,22 +85,22 @@ Vimeo stuff
 #main-overlay {
   grid-area: main;
   overflow: hidden;
-  background-color: rgba(70,0,0,.0);
   border-radius: 0px;
-  padding: 8px;
-  transition: background-color .15s;
+	border: 0em solid rgba(204,54,54,0);
+  padding: 0;
+  transition: border .2s;
   z-index: 3;
 }
 
 #main-overlay:hover{
-  background-color: rgba(198,178,208,.5);
+	border: 0.5em solid rgba(204,54,54,1);
 }
 
-#touch-zones {
+/* #touch-zones {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
-}
+} */
 
 .responsive-vimeo-container{
 	position: relative;
@@ -209,7 +209,7 @@ p {
 }
 
 .surveybox {
-	padding: 10px;
+	padding: 1em;
 	grid-area: survey;
 	margin-left: 10%;
 	/* background-color: #97CFAB; */
@@ -242,38 +242,53 @@ p {
 	grid-area: function;
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-	grid-template-areas:
+	grid-template-rows: repeat(10, 1fr);
+	/* grid-template-areas:
 		"videolabel"
-		"controlsboxplaypause"
-		"controlsboxtoggletrack"
-		"controlsboxspare"
-		"commentlabel";
+		"controlsplaypause"
+		"controlstoggletrack"
+		"controlsspare"
+		"commentlabel"; */
 	grid-gap: 0px;
 }
 
-#controlsboxplaypause {
-	grid-area: controlsboxplaypause;
+.controls {
 	margin: auto;
 	display: block;
 	width: 65%;
 	cursor:pointer;
 }
 
-#controlsboxplaypause .cls-1 {
+.controls .cls-1 {
 	fill: #97CFAB;
 	-webkit-transition: fill 0.15s ease-in-out;
 	transition: fill 0.15s ease-in-out;
 }
 
-#controlsboxplaypause:hover .cls-1 {
+.controls:hover .cls-1 {
 	fill: #12105B;
 }
 
+#controlsplaypause {
+	grid-row: 3;
+}
 
-#controlsboxtoggletrack {
-	grid-area: controlsboxtoggletrack;
-	margin: auto;
+#controlsvolup {
+	grid-row: 4;
+}
+
+#controlsvoldown {
+	grid-row: 5;
+}
+
+#controlstoggletrack {
+	grid-row: 6;
+	margin: auto auto 0.5em auto;
+}
+
+#controlstogglelabel {
+	grid-row: 7;
+	margin-right: 1em;
 }
 
 .peekaboo {
@@ -386,13 +401,14 @@ input:checked + .toggleslider:before {
 	letter-spacing: 0.025em;
 	color: #120E3D;
 	line-height: 1.5vw;
+	text-align: right;
 }
 
-input[type="text"],input[type="email"],textarea {
+input[type="text"],input[type="email"],input[type="password"],textarea {
 	font-family: 'Rubik', sans-serif;
-	font-size: 0.85vw;
-	letter-spacing: 0.1em;
-	font-weight: bold;
+	font-size: 0.8vw;
+	letter-spacing: 0.12em;
+	font-weight: medium;
 	text-transform: none;
 	color: #CC3636;
 	text-align: left;
@@ -402,13 +418,13 @@ input[type="text"],input[type="email"],textarea {
 	border-radius: 50px;
 	-webkit-transition: width 0.15s ease-in-out;
 	transition: width 0.15s ease-in-out;
-	width:60%;
+	width:70%;
 	padding-right:5%;
 }
 
-input[type="text"]:focus,input[type="email"]:focus {
+input[type="text"]:focus,input[type="email"]:focus,input[type="password"]:focus {
 	/* border: 3px solid #DD5F5B; */
-  width: 90%;
+  width: 100%;
 }
 
 #vidlabel {
@@ -427,21 +443,26 @@ input[type="text"]:focus,input[type="email"]:focus {
 
 #nameform {
 	grid-row: 1;
-	grid-column: 1/span 3;
+	grid-column: 1/span 1;
+}
+
+#pwform {
+	grid-row: 2;
+	grid-column: 1/span 2;
 }
 
 #emailform {
-	grid-row: 2;
+	grid-row: 3;
 	grid-column: 1/span 3;
 }
 
 #surveytip {
-	grid-row:3;
+	grid-row:4;
 	grid-column: 1/span 1;
 }
 
 #surveybgs {
-	grid-row: 3;
+	grid-row: 4;
 	grid-column: 2/span 3;
 }
 
@@ -457,12 +478,12 @@ input[type="text"]:focus,input[type="email"]:focus {
 }
 
 #otherform {
-	grid-row: 4;
+	grid-row: 5;
 	grid-column: 1/span 3;
 }
 
 .surveydone {
-	grid-row: 3;
+	grid-row: 4;
 	grid-column: 4;
 }
 
@@ -470,6 +491,7 @@ input[type="text"]:focus,input[type="email"]:focus {
 	width: 100%;
 	height: 100%;
 }
+
 
 #surveybutton, #submitbutton {
 	background-color: #CC3636;
@@ -483,6 +505,9 @@ input[type="text"]:focus,input[type="email"]:focus {
 	cursor:pointer;
 	-webkit-transition: background-color 0.15s, border 0.15s ease-in-out;
 	transition: background-color 0.15s, border 0.15s ease-in-out;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 #surveybutton:hover, #submitbutton:hover {

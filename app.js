@@ -10,6 +10,18 @@ var users = require('./routes/users');
 
 var app = express();
 
+//.env
+require('dotenv').config();
+
+// mongoose
+var mongoose = require('mongoose');
+var mongoDB = process.env.MONGODB_URL;
+console.log("mongoDB url is " + mongoDB);
+mongoose.connect(mongoDB);
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
