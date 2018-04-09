@@ -243,12 +243,6 @@ p {
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(10, 1fr);
-	/* grid-template-areas:
-		"videolabel"
-		"controlsplaypause"
-		"controlstoggletrack"
-		"controlsspare"
-		"commentlabel"; */
 	grid-gap: 0px;
 }
 
@@ -267,6 +261,10 @@ p {
 
 .controls:hover .cls-1 {
 	fill: #12105B;
+}
+
+#controlsspeedtoggle {
+	grid-row: 2;
 }
 
 #controlsplaypause {
@@ -369,7 +367,7 @@ input:checked + .toggleslider:before {
 	padding: 1% 2% 0 2%;
 	resize: none;
 	box-sizing: border-box;
-	overflow: scroll;
+	overflow: hidden;
 }
 
 .label-right, .label-left {
@@ -420,6 +418,7 @@ input[type="text"],input[type="email"],input[type="password"],textarea {
 	transition: width 0.15s ease-in-out;
 	width:70%;
 	padding-right:5%;
+	max-height: 3em;
 }
 
 input[type="text"]:focus,input[type="email"]:focus,input[type="password"]:focus {

@@ -16,7 +16,7 @@ require('dotenv').config();
 // mongoose
 var mongoose = require('mongoose');
 var mongoDB = process.env.MONGODB_URL;
-console.log("mongoDB url is " + mongoDB);
+// console.log("mongoDB url is " + mongoDB);
 mongoose.connect(mongoDB);
 var db = mongoose.connection;
 

@@ -8,6 +8,7 @@ var currentVideoTitle = 'Cello Tap'
 var currentVideoUrl = 'https://vimeo.com/260963404'
 
 /* get document forms and buttons */
+var speedToggleButton = document.querySelector('#controlsspeedtoggle');
 var playPauseButton = document.querySelector('#controlsplaypause');
 var volUpButton = document.querySelector('#controlsvolup');
 var volDownButton = document.querySelector('#controlsvoldown');
@@ -25,6 +26,7 @@ var playercontainer = document.querySelector('#playercontainer');
 var vimeoElement = document.createElement('iframe');
 var videoOverlay = document.querySelector('#main-overlay');
 var secretStuff = document.querySelector('.peekaboo');
+var wholeSite = document.querySelector('.site');
 
 /* default state on first load */
 trackingToggle.checked=false;
@@ -132,59 +134,100 @@ var player = new Vimeo.Player('playercontainer', options);
 //   }
 // })
 
+
+
 /* cursor tracking over video */
+/* seems to return things scaled by 1.1 compared to actual*/
 videoOverlay.addEventListener('click', function(e){
-  var x = e.clientX;
-  var y = e.clientY;
+    /* e is event object */
+    /*get xy client position as percentage of overlay div at that point in time!!!!*/
+  /*responsive stuff, chuck if this breaks */
+  var vidWindowWidth = e.currentTarget.offsetWidth;
+  var vidWindowHeight = e.currentTarget.offsetHeight;
+  console.log("client width is: "+vidWindowWidth);
+  console.log("client height is: "+vidWindowHeight);
+  /*end responsive try*/
+  var x = e.clientX - e.currentTarget.offsetLeft;
+  var y = e.clientY - e.currentTarget.offsetTop;
   console.log("x is " + x);
   console.log("y is " + y);
-  var trueX = Math.round(3.09*(x - 13));
-  var trueY = Math.round(3.09*(350 - (y - 117)));
-  if (trueX > 1920) {
-    /* something fishy with the math now that this is responsive */
-    trueX = 1920
-  }
-  if (trueX <0) {
-    trueX = 0
-  }
-  if (trueY > 1080) {
-    trueY = 1080
-  }
-  if (trueY <0) {
-    trueY = 0
-  }
-  console.log("trueX is " + trueX);
-  console.log("trueY is " + trueY);
+  var relativeX = x/vidWindowWidth;
+  var relativeY = y/vidWindowHeight;
+  console.log("relative x is " + relativeX);
+  console.log("relative y is " + relativeY);
   var d = new Date();
   var theClockTime = d.getTime();
-  player.getCurrentTime()
-    .then(function(seconds){
-      var videoTime = 1000 * seconds;
-      // var theOffset = theClockTime-videoTime;
-      // var newText = ("logged " + e.target.id + " event at " + videoTime + ". x = " + trueX + " and y = " + trueY );
-      // var newElement = document.createElement('p');
-      // newElement.innerHTML = newText;
-      // results.prepend(newElement);
-      userEvents.push({
-        userName: nameField.value,
-        note: "",
-        videoId: currentVideoId,
-        videoUrl: currentVideoUrl,
-        videoTitle: currentVideoTitle,
-        eventType: e.target.id,
-        clockTs: theClockTime,
-        videoTs: videoTime,
-        xPosition: x,
-        yPosition: y,
-        trueXPosition: trueX,
-        trueYPosition: trueY
-      })
-      // console.log(userEvents);
-    })
-  .catch(function(err){
-    console.log(err);
+  player.getCurrentTime().then(function(seconds) {
+    var videoTimeS=seconds;
+    console.log("seconds: "+videoTimeS);
+    var videoTimeMs=videoTimeS*1000;
+    player.addCuePoint(videoTimeS)
+      .then(function(id) {
+        // cue point was added successfully
+        // console.log("added cue point, pushing user events");
+        userEvents.push({
+              userName: nameField.value,
+              note: "",
+              videoId: currentVideoId,
+              videoUrl: currentVideoUrl,
+              videoTitle: currentVideoTitle,
+              eventType: "clickCapture",
+              clockTs: theClockTime,
+              videoTs: videoTimeMs,
+              xPosition: x,
+              yPosition: y,
+              relativeXPosition: relativeX,
+              relativeYPosition: relativeY
+            })
+      }).catch(function(error) {
+          switch (error.name) {
+              case 'UnsupportedError':
+                  // cue points are not supported with the current player or browser
+                  break;
+
+              case 'RangeError':
+                  // the time was less than 0 or greater than the video’s duration
+                  break;
+
+              default:
+                  // some other error occurred
+                  break;
+          }
     });
+  });
+
 });
+
+
+    /*replacing*/
+  // player.getCurrentTime()
+  //   .then(function(seconds){
+  //     var videoTime = 1000 * seconds;
+  //     // var theOffset = theClockTime-videoTime;
+  //     // var newText = ("logged " + e.target.id + " event at " + videoTime + ". x = " + trueX + " and y = " + trueY );
+  //     // var newElement = document.createElement('p');
+  //     // newElement.innerHTML = newText;
+  //     // results.prepend(newElement);
+  //     userEvents.push({
+  //       userName: nameField.value,
+  //       note: "",
+  //       videoId: currentVideoId,
+  //       videoUrl: currentVideoUrl,
+  //       videoTitle: currentVideoTitle,
+  //       eventType: e.target.id,
+  //       clockTs: theClockTime,
+  //       videoTs: videoTime,
+  //       xPosition: x,
+  //       yPosition: y,
+  //       relativeXPosition: relativeX,
+  //       relativeYPosition: relativeY
+  //     })
+  //     // console.log(userEvents);
+  //   })
+//   .catch(function(err){
+//     console.log(err);
+//     });
+// });
 
 playPauseButton.addEventListener('click', function(){
   player.getPaused().then(function(paused) {
@@ -399,10 +442,14 @@ function sendData(data) {
   XHR.open('POST', '/cellosend', true);
   XHR.setRequestHeader('Content-type','application/json; charset=utf-8');
   XHR.send(JSON.stringify(dataObject));
-  console.log("sent this to the db:"+dataObject);
+  console.log(dataObject);
+
+  console.log("sent session data to the db");
   // location.reload();
 }
 
 function stopVideo() {
   player.stopVideo();
 }
+
+//Touch.clientX will do mobile
