@@ -141,20 +141,51 @@ var player = new Vimeo.Player('playercontainer', options);
 videoOverlay.addEventListener('click', function(e){
     /* e is event object */
     /*get xy client position as percentage of overlay div at that point in time!!!!*/
-  /*responsive stuff, chuck if this breaks */
+
+
+  /*OLD var vidWindowWidth = e.currentTarget.offsetWidth;
+  // var vidWindowHeight = e.currentTarget.offsetHeight;
+  // console.log("client width is: "+vidWindowWidth);
+  // console.log("client height is: "+vidWindowHeight);
+  // /*end responsive try*/
+  // var x = e.clientX - e.currentTarget.offsetLeft;
+  // var y = e.clientY - e.currentTarget.offsetTop;
+  // console.log("x is " + x);
+  // console.log("y is " + y);
+  // var relativeX = x/vidWindowWidth;
+  // var relativeY = y/vidWindowHeight;
+  // console.log("relative x is " + relativeX);
+  // console.log("relative y is " + relativeY);*OLD/
+
+/*this should work for 16:9;n.b. on Phil's computer browser pixels are approx. 110% screen pixels*/
   var vidWindowWidth = e.currentTarget.offsetWidth;
   var vidWindowHeight = e.currentTarget.offsetHeight;
-  console.log("client width is: "+vidWindowWidth);
-  console.log("client height is: "+vidWindowHeight);
+  var actualVideoHeight = Math.round(vidWindowWidth/16*9);
+  var blackBarHeight = (vidWindowHeight-actualVideoHeight)/2;
+  console.log("video container width is: "+vidWindowWidth);
+  console.log("video container height is: "+vidWindowHeight);
+  console.log("player height should be: "+actualVideoHeight);
+  console.log("black bar height should be: "+blackBarHeight);
   /*end responsive try*/
-  var x = e.clientX - e.currentTarget.offsetLeft;
-  var y = e.clientY - e.currentTarget.offsetTop;
-  console.log("x is " + x);
-  console.log("y is " + y);
-  var relativeX = x/vidWindowWidth;
-  var relativeY = y/vidWindowHeight;
-  console.log("relative x is " + relativeX);
-  console.log("relative y is " + relativeY);
+  var vidX = e.clientX - e.currentTarget.offsetLeft;
+  var vidY = e.clientY - e.currentTarget.offsetTop;
+  var vidYAdjustedCalc = vidY - blackBarHeight;
+  if (vidYAdjustedCalc < 0) {
+    var vidYAdjusted = 0;
+  } else {var vidYAdjusted = vidYAdjustedCalc;}
+  console.log("x is " + vidX);
+  console.log("y is " + vidY);
+  console.log("adjusted y is: "+vidYAdjusted);
+  var vidXRelativeX = vidX/vidWindowWidth;
+  var vidYRelativeY = vidY/vidWindowHeight;
+  var vidYRelativeX = vidYAdjusted/vidWindowWidth;
+  var vidYRelativeY = vidYAdjusted/actualVideoHeight;
+  console.log("x relative to video container width is " + vidXRelativeX);
+  console.log("y relative to video container height is " + vidYRelativeY);
+  console.log("adjusted y relative to video container width is "+vidYRelativeX);
+  console.log("adjusted y relative to video container height is "+vidYRelativeY);
+
+
   var d = new Date();
   var theClockTime = d.getTime();
   player.getCurrentTime().then(function(seconds) {
@@ -174,10 +205,12 @@ videoOverlay.addEventListener('click', function(e){
               eventType: "clickCapture",
               clockTs: theClockTime,
               videoTs: videoTimeMs,
-              xPosition: x,
-              yPosition: y,
-              relativeXPosition: relativeX,
-              relativeYPosition: relativeY
+              videoWidth: vidWindowWidth,
+              videoHeight: actualVideoHeight,
+              absoluteXPosition: vidX,
+              absoluteYPosition: vidYAdjusted,
+              XposrelativetoWidth: vidXRelativeX,
+              YposrelativetoWidth: vidYRelativeX
             })
       }).catch(function(error) {
           switch (error.name) {

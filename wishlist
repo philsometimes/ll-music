@@ -1,14 +1,13 @@
 WISHLIST:
 
-make clicks relative to video playercontainer
-  maybe by making the offsetwidth var when tracker is toggled so we know for sure the player iframe exists
-oauth
-mobile friendliness
-session handling
-help text (hidable)
-use vimeo cue points for markers?
-agent detection (warning message for safari and mobile)
-feedback once data sends
-make relative! subtract top and bottom black bars
-feedback form
-credits: built on node at bok ll by jordan marlon david and phil
+* make clicks relative to video playercontainer
+  * maybe by making the offsetwidth var when tracker is toggled so we know for sure the player iframe exists
+* oauth
+* mobile friendliness
+* help text (hidable)
+* use vimeo cue points for markers?
+* agent detection (warning message for safari and mobile)
+* feedback once data sends
+* make relative! subtract top and bottom black bars
+* feedback form
+* credits: built on node at bok ll by jordan marlon david and phil
